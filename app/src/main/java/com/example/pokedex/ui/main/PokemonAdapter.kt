@@ -3,8 +3,6 @@ package com.example.pokedex.ui.main
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Filter
-import android.widget.Filterable
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -18,9 +16,7 @@ import com.example.pokedex.model.PokemonEntity
 import java.util.*
 
 class PokemonAdapter(private var items: ArrayList<PokemonEntity>, private val fragment: Fragment) :
-  RecyclerView.Adapter<PokemonAdapter.UserViewHolder>(), Filterable {
-
-  private var filterItems = items
+  RecyclerView.Adapter<PokemonAdapter.UserViewHolder>() {
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
     val view = LayoutInflater.from(parent.context).inflate(R.layout.item_pokemon_list, parent, false)
@@ -28,29 +24,21 @@ class PokemonAdapter(private var items: ArrayList<PokemonEntity>, private val fr
   }
 
   override fun getItemCount(): Int {
-    return filterItems.size
+    return items.size
   }
 
   fun setItemsAdapter(newList: ArrayList<PokemonEntity>) {
-    val oldList = filterItems
+    val oldList = items
     val futureList = arrayListOf<PokemonEntity>()
-    (filterItems + newList).distinct().flatMapTo(futureList) { arrayListOf(it) }
-    val diffCallback =
-      PostDiffCallback(oldList, futureList)
+    (oldList + newList).distinct().flatMapTo(futureList) { arrayListOf(it) }
+    val diffCallback = PokemonDiffCallback(oldList, futureList)
     val diffResult = DiffUtil.calculateDiff(diffCallback)
-    filterItems = futureList
-    if (items.isEmpty()) {
-      items = futureList
-    }
+    items = futureList
     diffResult.dispatchUpdatesTo(this)
   }
 
-  fun getItems(): ArrayList<PokemonEntity> {
-    return filterItems
-  }
-
   override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
-    val item = filterItems[position]
+    val item = items[position]
     holder.nameTextView.text = item.name.toUpperCase(Locale.ROOT)
     holder.idTextView.text = "#${item.id}"
     Glide.with(fragment)
@@ -169,7 +157,7 @@ class PokemonAdapter(private var items: ArrayList<PokemonEntity>, private val fr
     var type2TextView: TextView = view.findViewById(R.id.type_2) as TextView
   }
 
-  class PostDiffCallback(
+  class PokemonDiffCallback(
     private val oldList: List<PokemonEntity>,
     private val newList: List<PokemonEntity>
   ) : DiffUtil.Callback() {
@@ -191,33 +179,4 @@ class PokemonAdapter(private var items: ArrayList<PokemonEntity>, private val fr
     }
   }
 
-  override fun getFilter(): Filter {
-    return object : Filter() {
-      override fun publishResults(charSequence: CharSequence?, filterResults: FilterResults) {
-        filterItems = filterResults.values as ArrayList<PokemonEntity>
-        notifyDataSetChanged()
-      }
-
-      override fun performFiltering(charSequence: CharSequence?): FilterResults {
-        val keyWords = charSequence?.toString()?.toLowerCase(Locale.ROOT)
-        val filterResults = FilterResults()
-        val suggestions = if (keyWords == null || keyWords.isEmpty())
-          items
-        else {
-          items.filter {
-            it.id.toString().contains(keyWords) ||
-                it.name.toLowerCase(Locale.ROOT).contains(keyWords) ||
-                it.abilities.contains(keyWords) ||
-                it.forms.contains(keyWords) ||
-                it.types.contains(keyWords) ||
-                it.moves.contains(keyWords) ||
-                it.species.toLowerCase(Locale.ROOT).contains(keyWords)
-          }
-        }
-        filterResults.values = suggestions
-        filterResults.count = suggestions.count()
-        return filterResults
-      }
-    }
-  }
 }

@@ -99,3 +99,28 @@ class MainViewModel(
 
 }
 
+/*
+
+fun getSpeciesById(id: Int) {
+  disposable = service.requestSpecies(id)
+    .subscribeOn(Schedulers.io())
+    .observeOn(AndroidSchedulers.mainThread())
+    .subscribe({ result ->
+      println("Result ${result.name}")
+    }, { error ->
+      println("Error ${error.message}")
+    })
+}
+
+fun getEvolutionById(id: Int) {
+  disposable = service.requestEvolution(id)
+    .subscribeOn(Schedulers.io())
+    .observeOn(AndroidSchedulers.mainThread())
+    .subscribe({ result ->
+      println("Result ${result.chain.evolves_to[0].species.name}")
+    }, { error ->
+      println("Error ${error.message}")
+    })
+}
+
+*/

@@ -1,10 +1,13 @@
 package com.example.pokedex.ui.main
 
+import android.graphics.Color
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -40,11 +43,40 @@ class MainFragment : Fragment() {
   }
 
   private fun setupView() {
+    setHasOptionsMenu(true)
     mainActivity = activity as MainActivity
     mainActivity.showProgressBar(true)
     setupRecyclerView()
     observers()
-    viewModel.getPokemonList(0,20)
+    viewModel.getPokemonList(0, 20)
+  }
+
+  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    searchBarFilter(menu, inflater)
+    super.onCreateOptionsMenu(menu, inflater)
+  }
+
+  private fun searchBarFilter(menu: Menu, inflater: MenuInflater) {
+    inflater.inflate(R.menu.search, menu)
+    val searchItem = menu.findItem(R.id.action_search)
+    val searchView = searchItem.actionView as SearchView
+    searchView.setBackgroundColor(Color.WHITE)
+    val editText = searchView.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
+    editText.setHintTextColor(Color.LTGRAY)
+    editText.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimaryDark))
+    val clearIcon = searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
+    clearIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.colorPrimaryDark))
+
+    searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+      override fun onQueryTextSubmit(query: String?): Boolean {
+        return true
+      }
+
+      override fun onQueryTextChange(newText: String?): Boolean {
+        // filter
+        return false
+      }
+    })
   }
 
   private fun setupRecyclerView() {
@@ -53,7 +85,7 @@ class MainFragment : Fragment() {
     recyclerView.layoutManager = layoutManager
     recyclerView.adapter = adapter
     recyclerView.addOnScrolledToEnd {
-      viewModel.getPokemonList(adapter.itemCount +1 , adapter.itemCount + 20)
+      viewModel.getPokemonList(adapter.itemCount + 1, adapter.itemCount + 20)
     }
   }
 

@@ -10,7 +10,7 @@
     </style>
 
     <style name="AppTheme.Toolbar" parent="Widget.AppCompat.Toolbar">
-        <item name="titleTextColor">@color/colorPrimaryDark</item>
+        <item name="titleTextColor">@color/colorAccent</item>
     </style>
 
 </resources>
