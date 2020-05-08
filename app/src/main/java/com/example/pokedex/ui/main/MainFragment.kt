@@ -10,22 +10,21 @@ import com.example.pokedex.R
 
 class MainFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = MainFragment()
-    }
+  companion object {
+    fun newInstance() = MainFragment()
+  }
 
-    private val viewModel: MainViewModel by activityViewModels()
-    private lateinit var root: View
+  private val viewModel: MainViewModel by activityViewModels()
+  private lateinit var root: View
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
-        root = inflater.inflate(R.layout.main_fragment, container, false)
-        viewModel.getPokemonList(0)
-        viewModel.getPokemonById(2)
-        viewModel.getSpeciesById(62)
-        viewModel.getEvolutionById(2)
+  override fun onCreateView(
+    inflater: LayoutInflater, container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View {
+    root = inflater.inflate(R.layout.main_fragment, container, false)
 
-        return root
-    }
+    viewModel.getPokemonById(1)
+    return root
+  }
 
 }

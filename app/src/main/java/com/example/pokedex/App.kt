@@ -1,7 +1,8 @@
 package com.example.pokedex
 
 import android.app.Application
-import com.example.pokedex.network.ClientAPI
+import com.example.pokedex.db.AppDatabase
+import com.example.pokedex.network.PokemonService
 import io.reactivex.disposables.Disposable
 
 class App: Application() {
@@ -9,10 +10,10 @@ class App: Application() {
     companion object {
         lateinit var instance: App
 
-       // lateinit var db : AppDatabase
+        lateinit var db : AppDatabase
 
         val pokemonService by lazy {
-            ClientAPI.create()
+            PokemonService.create()
         }
         var disposable: Disposable? = null
     }
@@ -20,9 +21,6 @@ class App: Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        /*db = Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java, "mobile-challenge-db"
-        ).build()*/
+        db = AppDatabase.getInstance(this)
     }
 }

@@ -1,6 +1,6 @@
 package com.example.pokedex.model
 
-class EvolutionChainEntity (
+class EvolutionChain (
     val baby_trigger_item: Detail?,
     val chain: Chain,
     val id: Int

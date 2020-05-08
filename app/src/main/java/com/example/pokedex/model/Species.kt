@@ -1,6 +1,6 @@
 package com.example.pokedex.model
 
-class SpeciesEntity (
+class Species (
     val base_happiness: Int,
     val capture_rate: Int,
     val color: Detail,
