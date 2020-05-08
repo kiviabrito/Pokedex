@@ -18,7 +18,53 @@ class PokemonInfo(
     val stats: List<Stat>,
     val types: List<Type>,
     val weight: Int
-)
+) {
+    fun createPokemonEntity(): PokemonEntity {
+        val abilities = mutableListOf<String>()
+        this.abilities.forEach { ability ->
+            if (ability.is_hidden.not()) {
+                abilities.add(ability.ability.name)
+            }
+        }
+        val forms = mutableListOf<String>()
+        this.forms.forEach { form ->
+            forms.add(form.name)
+        }
+        val heldItems = mutableListOf<String>()
+        this.held_items.forEach { item ->
+            heldItems.add(item.item.name)
+        }
+        val moves = mutableListOf<String>()
+        this.moves.forEach { move ->
+            moves.add(move.move.name)
+        }
+        val types = mutableListOf<String>()
+        this.types.forEach { type ->
+            types.add(type.type.name)
+        }
+        return PokemonEntity(
+            id = this.id,
+            name = this.name,
+            photos = listOf(
+                this.sprites.front_default,
+                this.sprites.front_shiny,
+                this.sprites.back_shiny,
+                this.sprites.front_shiny
+            ),
+            abilities = abilities,
+            forms = forms,
+            height = this.height,
+            held_items = heldItems,
+            is_default = this.is_default,
+            moves = moves,
+            order = this.order,
+            species = this.species.name,
+            stats = this.stats,
+            types = types,
+            weight = this.height
+        )
+    }
+}
 
 data class Ability(
     val ability: Detail,

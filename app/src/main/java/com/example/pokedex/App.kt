@@ -15,7 +15,6 @@ class App: Application() {
         val pokemonService by lazy {
             PokemonService.create()
         }
-        var disposable: Disposable? = null
     }
 
     override fun onCreate() {
