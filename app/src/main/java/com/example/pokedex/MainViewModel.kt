@@ -1,9 +1,8 @@
-package com.example.pokedex.ui.main
+package com.example.pokedex
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.pokedex.App
 import com.example.pokedex.db.AppDatabase
 import com.example.pokedex.model.PokemonEntity
 import com.example.pokedex.model.PokemonInfo
@@ -116,29 +115,3 @@ class MainViewModel(
   }
 
 }
-
-/*
-
-fun getSpeciesById(id: Int) {
-  disposable = service.requestSpecies(id)
-    .subscribeOn(Schedulers.io())
-    .observeOn(AndroidSchedulers.mainThread())
-    .subscribe({ result ->
-      println("Result ${result.name}")
-    }, { error ->
-      println("Error ${error.message}")
-    })
-}
-
-fun getEvolutionById(id: Int) {
-  disposable = service.requestEvolution(id)
-    .subscribeOn(Schedulers.io())
-    .observeOn(AndroidSchedulers.mainThread())
-    .subscribe({ result ->
-      println("Result ${result.chain.evolves_to[0].species.name}")
-    }, { error ->
-      println("Error ${error.message}")
-    })
-}
-
-*/

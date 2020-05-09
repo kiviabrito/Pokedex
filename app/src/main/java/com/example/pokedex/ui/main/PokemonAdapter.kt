@@ -64,10 +64,10 @@ class PokemonAdapter(private var items: ArrayList<PokemonEntity>, private val fr
       2 -> {
         holder.type1TextView.visibility = View.VISIBLE
         holder.type2TextView.visibility = View.VISIBLE
-        holder.type1TextView.text = item.types[0].capitalize(Locale.ROOT)
-        holder.type2TextView.text = item.types[1].capitalize(Locale.ROOT)
-        setBackGroundColor(holder.type1TextView, item.types[0])
-        setBackGroundColor(holder.type2TextView, item.types[1])
+        holder.type1TextView.text = item.types[1].capitalize(Locale.ROOT)
+        holder.type2TextView.text = item.types[0].capitalize(Locale.ROOT)
+        setBackGroundColor(holder.type1TextView, item.types[1])
+        setBackGroundColor(holder.type2TextView, item.types[0])
       }
     }
   }

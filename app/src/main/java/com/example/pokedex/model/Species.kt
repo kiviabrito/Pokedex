@@ -7,11 +7,11 @@ class Species (
     val egg_groups: List<Detail>,
     val evolution_chain: URLString,
     val evolves_from_species: Detail,
-    val flavor_text_entries: List<Flavor>,
+    val flavor_text_entries: List<Flavor>, // search for language name "en" and get flavor_text for pokemon description
     val form_descriptions: List<Detail>,
     val forms_switchable: Boolean,
     val gender_rate: Int,
-    val genera: List<Genera>,
+    val genera: List<Genera>, // search for language name "en" and get genus for category name
     val generation: Detail,
     val growth_rate: Detail,
     val habitat: Detail,

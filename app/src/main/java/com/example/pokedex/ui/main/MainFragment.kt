@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokedex.MainActivity
+import com.example.pokedex.MainViewModel
 import com.example.pokedex.R
 import com.example.pokedex.model.PokemonEntity
 import com.example.pokedex.utility.CustomListAdapter
@@ -53,11 +54,43 @@ class MainFragment : Fragment() {
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-    searchBarFilter(menu, inflater)
+    searchBar(menu, inflater)
     super.onCreateOptionsMenu(menu, inflater)
   }
 
-  private fun searchBarFilter(menu: Menu, inflater: MenuInflater) {
+  private fun setupRecyclerView() {
+    recyclerView = root.findViewById(R.id.pokemon_list)
+    val layoutManager = LinearLayoutManager(requireContext())
+    recyclerView.layoutManager = layoutManager
+    recyclerView.adapter = adapter
+    recyclerView.addOnScrolledToEnd {
+      viewModel.getPokemonList(adapter.itemCount + 1, adapter.itemCount + 20)
+    }
+  }
+
+  // MARK: Observers
+
+  private fun observers() {
+    viewModel.pokemonListAutoComplete.observe(viewLifecycleOwner, Observer { list ->
+      mainActivity.showProgressBar(false)
+      val adapter = CustomListAdapter(requireContext(), R.layout.item_autocomplete_text, list)
+      searchAutoComplete?.setAdapter(adapter)
+    })
+
+    viewModel.pokemonList.observe(viewLifecycleOwner, Observer { list ->
+      mainActivity.showProgressBar(false)
+      adapter.setItemsAdapter(list)
+    })
+
+    viewModel.error.observe(viewLifecycleOwner, Observer { error ->
+      mainActivity.showProgressBar(false)
+      Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
+    })
+  }
+
+  // MARK: SearchView
+
+  private fun searchBar(menu: Menu, inflater: MenuInflater) {
     inflater.inflate(R.menu.search, menu)
     val searchItem = menu.findItem(R.id.action_search)
     val searchView = searchItem.actionView as SearchView
@@ -101,36 +134,6 @@ class MainFragment : Fragment() {
     }
   }
 
-  private fun setupRecyclerView() {
-    recyclerView = root.findViewById(R.id.pokemon_list)
-    val layoutManager = LinearLayoutManager(requireContext())
-    recyclerView.layoutManager = layoutManager
-    recyclerView.adapter = adapter
-    recyclerView.addOnScrolledToEnd {
-      viewModel.getPokemonList(adapter.itemCount + 1, adapter.itemCount + 20)
-    }
-  }
-
-  // MARK: Observers
-
-  private fun observers() {
-    viewModel.pokemonListAutoComplete.observe(viewLifecycleOwner, Observer { list ->
-      mainActivity.showProgressBar(false)
-      val adapter = CustomListAdapter(requireContext(), R.layout.item_autocomplete_text, list)
-      searchAutoComplete?.setAdapter(adapter)
-    })
-
-    viewModel.pokemonList.observe(viewLifecycleOwner, Observer { list ->
-      mainActivity.showProgressBar(false)
-      adapter.setItemsAdapter(list)
-    })
-
-    viewModel.error.observe(viewLifecycleOwner, Observer { error ->
-      mainActivity.showProgressBar(false)
-      Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
-    })
-  }
-
   // MARK: Helper Functions
 
   private fun RecyclerView.addOnScrolledToEnd(onScrolledToEnd: () -> Unit) {
@@ -158,7 +161,6 @@ class MainFragment : Fragment() {
           }
         }
       }
-
     })
 
   }
