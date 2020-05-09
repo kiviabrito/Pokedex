@@ -47,9 +47,13 @@ class PokemonInfo(
             name = this.name,
             photos = listOf(
                 this.sprites.front_default,
+                this.sprites.back_default,
                 this.sprites.front_shiny,
                 this.sprites.back_shiny,
-                this.sprites.front_shiny
+                this.sprites.front_female,
+                this.sprites.back_female,
+                this.sprites.front_shiny_female,
+                this.sprites.back_shiny_female
             ),
             abilities = abilities,
             forms = forms,
@@ -61,7 +65,7 @@ class PokemonInfo(
             species = this.species.name,
             stats = this.stats,
             types = types,
-            weight = this.height
+            weight = this.weight
         )
     }
 }

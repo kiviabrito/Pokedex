@@ -16,9 +16,11 @@ import com.example.pokedex.MainActivity
 import com.example.pokedex.MainViewModel
 import com.example.pokedex.R
 import com.example.pokedex.model.PokemonEntity
+import com.example.pokedex.ui.details.DetailsFragment
 import com.example.pokedex.utility.CustomListAdapter
+import com.example.pokedex.utility.addOnScrolledToEnd
 
-class MainFragment : Fragment() {
+class MainFragment : Fragment() , PokemonDetailsView  {
 
   // MARK: Init
 
@@ -31,9 +33,7 @@ class MainFragment : Fragment() {
   private lateinit var mainActivity: MainActivity
   private var searchAutoComplete: AutoCompleteTextView? = null
   private val viewModel: MainViewModel by activityViewModels()
-  private val adapter: PokemonAdapter by lazy {
-    PokemonAdapter(ArrayList(), this)
-  }
+  private val adapter: PokemonAdapter by lazy { PokemonAdapter(ArrayList()) }
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
@@ -47,6 +47,7 @@ class MainFragment : Fragment() {
   private fun setupView() {
     setHasOptionsMenu(true)
     mainActivity = activity as MainActivity
+    mainActivity.supportActionBar?.title = "Pokemon"
     mainActivity.showProgressBar(true)
     setupRecyclerView()
     observers()
@@ -62,6 +63,7 @@ class MainFragment : Fragment() {
     recyclerView = root.findViewById(R.id.pokemon_list)
     val layoutManager = LinearLayoutManager(requireContext())
     recyclerView.layoutManager = layoutManager
+    adapter.pokemonDetailsView = this
     recyclerView.adapter = adapter
     recyclerView.addOnScrolledToEnd {
       viewModel.getPokemonList(adapter.itemCount + 1, adapter.itemCount + 20)
@@ -130,39 +132,22 @@ class MainFragment : Fragment() {
       if (selectedPokemon != null) {
         println("open pokemon ${selectedPokemon.name}")
         searchAutoComplete?.text?.clear()
+        openPokemon(selectedPokemon.id)
       }
     }
   }
 
-  // MARK: Helper Functions
-
-  private fun RecyclerView.addOnScrolledToEnd(onScrolledToEnd: () -> Unit) {
-
-    this.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-      private val visibleThreshold = 5
-      private var loading = true
-      private var previousTotal = 0
-
-      override fun onScrollStateChanged(
-        recyclerView: RecyclerView,
-        newState: Int
-      ) {
-        with(layoutManager as LinearLayoutManager) {
-          val visibleItemCount = childCount
-          val totalItemCount = itemCount
-          val firstVisibleItem = findFirstVisibleItemPosition()
-          if (loading && totalItemCount > previousTotal) {
-            loading = false
-            previousTotal = totalItemCount
-          }
-          if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
-            onScrolledToEnd()
-            loading = true
-          }
-        }
-      }
-    })
-
+  override fun openPokemon(id: Int) {
+    if (mainActivity.supportFragmentManager.findFragmentByTag("DetailsFragment") == null) {
+      val bundle = Bundle()
+      bundle.putInt("ID",id )
+      val detailsFragment = DetailsFragment.newInstance()
+      detailsFragment.arguments = bundle
+      mainActivity.supportFragmentManager.beginTransaction()
+        .replace(R.id.container, detailsFragment, "DetailsFragment")
+        .addToBackStack(null)
+        .commit()
+    }
   }
 
 }

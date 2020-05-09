@@ -29,6 +29,10 @@ class MainViewModel(
   private val _pokemonListAutoComplete: MutableLiveData<ArrayList<PokemonEntity>> = MutableLiveData()
   val pokemonListAutoComplete: LiveData<ArrayList<PokemonEntity>> = _pokemonListAutoComplete
 
+  // Handle RecyclerView Data
+  private val _pokemonDetails: MutableLiveData<PokemonEntity> = MutableLiveData()
+  val pokemonDetails: LiveData<PokemonEntity> = _pokemonDetails
+
   fun getPokemonList(from: Int, to: Int) {
     val disposable = database.pokemonDao().select20(from = from, to = to)
       .subscribeOn(Schedulers.io())
@@ -105,6 +109,18 @@ class MainViewModel(
         _pokemonListAutoComplete.postValue(arrayList)
       }, { error ->
         this.error.postValue(error.message)
+      })
+    disposables.add(disposable)
+  }
+
+  fun getPokemonById(id: Int) {
+    val disposable = database.pokemonDao().findById(id)
+      .subscribeOn(Schedulers.io())
+      .observeOn(Schedulers.single())
+      .subscribe({ pokemon ->
+        _pokemonDetails.postValue(pokemon)
+      }, { error ->
+        println("Error ${error.message}")
       })
     disposables.add(disposable)
   }

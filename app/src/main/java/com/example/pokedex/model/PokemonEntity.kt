@@ -8,7 +8,7 @@ class PokemonEntity(
     @PrimaryKey
     val id: Int,
     val name: String,
-    val photos: List<String>,
+    val photos: List<String?>,
     val abilities: List<String>,
     val forms: List<String>, // NOT HIDDEN
     val height: Int,

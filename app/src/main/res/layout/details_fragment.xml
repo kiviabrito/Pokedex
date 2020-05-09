@@ -41,10 +41,9 @@
 
     <TextView
         android:id="@+id/height_input"
-        android:layout_width="50dp"
+        android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:minWidth="100dp"
-        android:text="@string/speed"
         android:padding="5dp"
         android:textAlignment="viewStart"
         android:visibility="visible"
@@ -69,10 +68,9 @@
 
     <TextView
         android:id="@+id/weight_input"
-        android:layout_width="50dp"
+        android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:minWidth="100dp"
-        android:text="@string/speed"
         android:padding="5dp"
         android:textAlignment="viewStart"
         android:visibility="visible"
@@ -84,7 +82,7 @@
         android:id="@+id/pokemon_photo_list"
         android:layout_width="0dp"
         android:layout_height="300dp"
-        android:background="@color/colorListBackground"
+        android:background="@color/colorPrimary"
         android:layout_margin="20dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -156,7 +154,7 @@
         android:layout_height="wrap_content"
         android:minWidth="100dp"
         android:background="@drawable/rounded_corners"
-        android:backgroundTint="@color/colorIce"
+        android:backgroundTint="@color/colorPrimary"
         android:textColor="@android:color/white"
         android:visibility="visible"
         android:padding="5dp"
@@ -173,7 +171,7 @@
         android:layout_height="wrap_content"
         android:minWidth="100dp"
         android:background="@drawable/rounded_corners"
-        android:backgroundTint="@color/colorIce"
+        android:backgroundTint="@color/colorPrimary"
         android:textColor="@android:color/white"
         android:textStyle="bold"
         android:padding="5dp"
@@ -197,179 +195,190 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ability_1"/>
 
-    <TextView
-        android:id="@+id/hp"
-        android:layout_width="180dp"
-        android:layout_height="30dp"
-        android:background="@drawable/rectangle_stroke"
-        android:text="@string/hp"
-        android:textStyle="bold"
-        android:visibility="visible"
-        android:padding="5dp"
-        android:layout_marginStart="16dp"
-        android:textAlignment="viewStart"
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        xmlns:card_view="http://schemas.android.com/tools"
+        android:backgroundTint="@android:color/white"
+        app:cardCornerRadius="5dp"
+        card_view:cardElevation="5dp"
+        card_view:cardUseCompatPadding="true"
+        app:contentPadding="10dp"
+        android:layout_margin="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/pokemon_stats"
-        app:layout_constraintEnd_toStartOf="@id/hp_input"
-        android:fontFamily="@font/aclonica"/>
+        app:layout_constraintEnd_toEndOf="parent" >
 
-    <TextView
-        android:id="@+id/hp_input"
-        android:layout_width="50dp"
-        android:layout_height="30dp"
-        android:background="@drawable/rectangle_stroke"
-        android:text="@string/speed"
-        android:padding="5dp"
-        android:textAlignment="viewStart"
-        android:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@id/pokemon_stats"
-        app:layout_constraintStart_toEndOf="@id/hp"
-        android:fontFamily="@font/aclonica"/>
+      <androidx.constraintlayout.widget.ConstraintLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/attach"
-        android:layout_width="180dp"
-        android:layout_height="30dp"
-        android:background="@drawable/rectangle_stroke"
-        android:text="@string/attach"
-        android:textStyle="bold"
-        android:visibility="visible"
-        android:padding="5dp"
-        android:layout_marginStart="16dp"
-        android:textAlignment="viewStart"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/hp"
-        app:layout_constraintEnd_toStartOf="@id/attach_input"
-        android:fontFamily="@font/aclonica"/>
+        <TextView
+            android:id="@+id/hp"
+            android:layout_width="180dp"
+            android:layout_height="30dp"
+            android:background="@drawable/rectangle_stroke"
+            android:text="@string/hp"
+            android:textStyle="bold"
+            android:visibility="visible"
+            android:padding="5dp"
+            android:textAlignment="viewStart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/hp_input"
+            android:fontFamily="@font/aclonica"/>
 
-    <TextView
-        android:id="@+id/attach_input"
-        android:layout_width="50dp"
-        android:layout_height="30dp"
-        android:background="@drawable/rectangle_stroke"
-        android:text="@string/speed"
-        android:padding="5dp"
-        android:textAlignment="viewStart"
-        android:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@id/hp"
-        app:layout_constraintStart_toEndOf="@id/attach"
-        android:fontFamily="@font/aclonica"/>
+        <TextView
+            android:id="@+id/hp_input"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:background="@drawable/rectangle_stroke"
+            android:padding="5dp"
+            android:textAlignment="viewStart"
+            android:visibility="visible"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/hp"
+            android:fontFamily="@font/aclonica"/>
 
-    <TextView
-        android:id="@+id/defense"
-        android:layout_width="180dp"
-        android:layout_height="30dp"
-        android:background="@drawable/rectangle_stroke"
-        android:text="@string/defense"
-        android:textStyle="bold"
-        android:visibility="visible"
-        android:padding="5dp"
-        android:layout_marginStart="16dp"
-        android:textAlignment="viewStart"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/attach"
-        app:layout_constraintEnd_toStartOf="@id/defense_input"
-        android:fontFamily="@font/aclonica"/>
+        <TextView
+            android:id="@+id/attach"
+            android:layout_width="180dp"
+            android:layout_height="30dp"
+            android:background="@drawable/rectangle_stroke"
+            android:text="@string/attach"
+            android:textStyle="bold"
+            android:visibility="visible"
+            android:padding="5dp"
+            android:textAlignment="viewStart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hp"
+            app:layout_constraintEnd_toStartOf="@id/attach_input"
+            android:fontFamily="@font/aclonica"/>
 
-    <TextView
-        android:id="@+id/defense_input"
-        android:layout_width="50dp"
-        android:layout_height="30dp"
-        android:background="@drawable/rectangle_stroke"
-        android:text="@string/speed"
-        android:padding="5dp"
-        android:textAlignment="viewStart"
-        android:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@id/attach"
-        app:layout_constraintStart_toEndOf="@id/defense"
-        android:fontFamily="@font/aclonica"/>
+        <TextView
+            android:id="@+id/attach_input"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:background="@drawable/rectangle_stroke"
+            android:padding="5dp"
+            android:textAlignment="viewStart"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@id/hp"
+            app:layout_constraintStart_toEndOf="@id/attach"
+            android:fontFamily="@font/aclonica"/>
 
-    <TextView
-        android:id="@+id/special_attach"
-        android:layout_width="180dp"
-        android:layout_height="30dp"
-        android:background="@drawable/rectangle_stroke"
-        android:text="@string/special_attach"
-        android:textStyle="bold"
-        android:visibility="visible"
-        android:padding="5dp"
-        android:layout_marginStart="16dp"
-        android:textAlignment="viewStart"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/defense"
-        app:layout_constraintEnd_toStartOf="@id/special_attach_input"
-        android:fontFamily="@font/aclonica"/>
+        <TextView
+            android:id="@+id/defense"
+            android:layout_width="180dp"
+            android:layout_height="30dp"
+            android:background="@drawable/rectangle_stroke"
+            android:text="@string/defense"
+            android:textStyle="bold"
+            android:visibility="visible"
+            android:padding="5dp"
+            android:textAlignment="viewStart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/attach"
+            app:layout_constraintEnd_toStartOf="@id/defense_input"
+            android:fontFamily="@font/aclonica"/>
 
-    <TextView
-        android:id="@+id/special_attach_input"
-        android:layout_width="50dp"
-        android:layout_height="30dp"
-        android:background="@drawable/rectangle_stroke"
-        android:text="@string/speed"
-        android:padding="5dp"
-        android:textAlignment="viewStart"
-        android:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@id/defense"
-        app:layout_constraintStart_toEndOf="@id/special_attach"
-        android:fontFamily="@font/aclonica"/>
+        <TextView
+            android:id="@+id/defense_input"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:background="@drawable/rectangle_stroke"
+            android:padding="5dp"
+            android:textAlignment="viewStart"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@id/attach"
+            app:layout_constraintStart_toEndOf="@id/defense"
+            android:fontFamily="@font/aclonica"/>
 
-    <TextView
-        android:id="@+id/special_defense"
-        android:layout_width="180dp"
-        android:layout_height="30dp"
-        android:background="@drawable/rectangle_stroke"
-        android:text="@string/special_defense"
-        android:textStyle="bold"
-        android:visibility="visible"
-        android:padding="5dp"
-        android:layout_marginStart="16dp"
-        android:textAlignment="viewStart"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/special_attach"
-        app:layout_constraintEnd_toStartOf="@id/special_defense_input"
-        android:fontFamily="@font/aclonica"/>
+        <TextView
+            android:id="@+id/special_attach"
+            android:layout_width="180dp"
+            android:layout_height="30dp"
+            android:background="@drawable/rectangle_stroke"
+            android:text="@string/special_attach"
+            android:textStyle="bold"
+            android:visibility="visible"
+            android:padding="5dp"
+            android:textAlignment="viewStart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/defense"
+            app:layout_constraintEnd_toStartOf="@id/special_attach_input"
+            android:fontFamily="@font/aclonica"/>
 
-    <TextView
-        android:id="@+id/special_defense_input"
-        android:layout_width="50dp"
-        android:layout_height="30dp"
-        android:background="@drawable/rectangle_stroke"
-        android:text="@string/speed"
-        android:padding="5dp"
-        android:textAlignment="viewStart"
-        android:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@id/special_attach"
-        app:layout_constraintStart_toEndOf="@id/special_defense"
-        android:fontFamily="@font/aclonica"/>
+        <TextView
+            android:id="@+id/special_attach_input"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:background="@drawable/rectangle_stroke"
+            android:padding="5dp"
+            android:textAlignment="viewStart"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@id/defense"
+            app:layout_constraintStart_toEndOf="@id/special_attach"
+            android:fontFamily="@font/aclonica"/>
 
-    <TextView
-        android:id="@+id/speed"
-        android:layout_width="180dp"
-        android:layout_height="30dp"
-        android:background="@drawable/rectangle_stroke"
-        android:text="@string/speed"
-        android:textStyle="bold"
-        android:visibility="visible"
-        android:padding="5dp"
-        android:layout_marginStart="16dp"
-        android:textAlignment="viewStart"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/special_defense"
-        app:layout_constraintEnd_toStartOf="@id/speed_input"
-        android:fontFamily="@font/aclonica"/>
+        <TextView
+            android:id="@+id/special_defense"
+            android:layout_width="180dp"
+            android:layout_height="30dp"
+            android:background="@drawable/rectangle_stroke"
+            android:text="@string/special_defense"
+            android:textStyle="bold"
+            android:visibility="visible"
+            android:padding="5dp"
+            android:textAlignment="viewStart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/special_attach"
+            app:layout_constraintEnd_toStartOf="@id/special_defense_input"
+            android:fontFamily="@font/aclonica"/>
 
-    <TextView
-        android:id="@+id/speed_input"
-        android:layout_width="50dp"
-        android:layout_height="30dp"
-        android:background="@drawable/rectangle_stroke"
-        android:text="@string/speed"
-        android:padding="5dp"
-        android:textAlignment="viewStart"
-        android:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@id/special_defense"
-        app:layout_constraintStart_toEndOf="@id/speed"
-        android:fontFamily="@font/aclonica"/>
+        <TextView
+            android:id="@+id/special_defense_input"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:background="@drawable/rectangle_stroke"
+            android:padding="5dp"
+            android:textAlignment="viewStart"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@id/special_attach"
+            app:layout_constraintStart_toEndOf="@id/special_defense"
+            android:fontFamily="@font/aclonica"/>
+
+        <TextView
+            android:id="@+id/speed"
+            android:layout_width="180dp"
+            android:layout_height="30dp"
+            android:background="@drawable/rectangle_stroke"
+            android:text="@string/speed"
+            android:textStyle="bold"
+            android:visibility="visible"
+            android:padding="5dp"
+            android:textAlignment="viewStart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/special_defense"
+            app:layout_constraintEnd_toStartOf="@id/speed_input"
+            android:fontFamily="@font/aclonica"/>
+
+        <TextView
+            android:id="@+id/speed_input"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:background="@drawable/rectangle_stroke"
+            android:padding="5dp"
+            android:textAlignment="viewStart"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@id/special_defense"
+            app:layout_constraintStart_toEndOf="@id/speed"
+            android:fontFamily="@font/aclonica"/>
+
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
 
 
   </androidx.constraintlayout.widget.ConstraintLayout>
