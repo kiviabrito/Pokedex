@@ -97,7 +97,7 @@ class MainViewModel(
   }
 
   fun queryPokemon(query: String) {
-    val disposable = database.pokemonDao().queryByName("%$query%")
+    val disposable = database.pokemonDao().queryByIdAndName("%$query%")
       .subscribeOn(Schedulers.computation())
       .observeOn(AndroidSchedulers.mainThread())
       .subscribe({ list ->

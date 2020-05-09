@@ -64,7 +64,7 @@ class MainFragment : Fragment() {
     searchAutoComplete = searchView.findViewById(androidx.appcompat.R.id.search_src_text)
     searchAutoComplete?.let { autoComplete ->
       autoComplete.setHintTextColor(Color.LTGRAY)
-      autoComplete.setTextColor(ContextCompat.getColor(context!!, R.color.colorPrimaryDark))
+      autoComplete.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimaryDark))
       autoComplete.setDropDownBackgroundResource(R.drawable.rounded_corners)
       autoComplete.setBackgroundColor(Color.WHITE)
     }
@@ -81,10 +81,11 @@ class MainFragment : Fragment() {
 
       override fun onQueryTextChange(newText: String?): Boolean {
         newText?.let { text ->
-          searchAutoComplete?.let { autoComplete ->
-            if (text.length > 1 && (autoComplete.adapter == null || autoComplete.adapter.isEmpty)) {
-              viewModel.queryPokemon(newText)
-            }
+          if (text.count() == 1) {
+            viewModel.queryPokemon(newText)
+          } else if (text.isEmpty()) {
+            val adapter = CustomListAdapter(requireContext(), R.layout.item_autocomplete_text, arrayListOf())
+            searchAutoComplete?.setAdapter(adapter)
           }
         }
         return false
@@ -102,7 +103,7 @@ class MainFragment : Fragment() {
 
   private fun setupRecyclerView() {
     recyclerView = root.findViewById(R.id.pokemon_list)
-    val layoutManager = LinearLayoutManager(context)
+    val layoutManager = LinearLayoutManager(requireContext())
     recyclerView.layoutManager = layoutManager
     recyclerView.adapter = adapter
     recyclerView.addOnScrolledToEnd {
@@ -115,7 +116,7 @@ class MainFragment : Fragment() {
   private fun observers() {
     viewModel.pokemonListAutoComplete.observe(viewLifecycleOwner, Observer { list ->
       mainActivity.showProgressBar(false)
-      val adapter = CustomListAdapter(context!!, R.layout.item_autocomplete_text, list)
+      val adapter = CustomListAdapter(requireContext(), R.layout.item_autocomplete_text, list)
       searchAutoComplete?.setAdapter(adapter)
     })
 
@@ -126,7 +127,7 @@ class MainFragment : Fragment() {
 
     viewModel.error.observe(viewLifecycleOwner, Observer { error ->
       mainActivity.showProgressBar(false)
-      Toast.makeText(context, error, Toast.LENGTH_LONG).show()
+      Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
     })
   }
 

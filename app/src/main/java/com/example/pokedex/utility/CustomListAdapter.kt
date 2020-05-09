@@ -29,13 +29,14 @@ class CustomListAdapter(context: Context, @LayoutRes private val layoutResource:
     return pokemonList[p0].id.toLong()
   }
 
+  @ExperimentalStdlibApi
   override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
     val view = convertView ?: LayoutInflater.from(context).inflate(layoutResource, parent, false)
     val pokemonPhoto: ImageView = view.findViewById(R.id.pokemon_photo) as ImageView
     val pokemonName: TextView = view.findViewById(R.id.pokemon_name) as TextView
 
     val pokemon = pokemonList[position]
-    pokemonName.text = "#${pokemon.id} - ${pokemon.name.capitalize()}"
+    pokemonName.text = "#${pokemon.id} - ${pokemon.name.capitalize(Locale.ROOT)}"
     Glide.with(context)
       .load(pokemon.photos[0])
       .into(pokemonPhoto)
