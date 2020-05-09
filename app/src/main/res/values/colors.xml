@@ -2,8 +2,9 @@
 <resources>
     <color name="colorPrimary">#0000ff</color>
     <color name="colorPrimaryDark">#0000ff</color>
-    <color name="colorAccent">#ffff00</color>
+    <color name="colorAccent">#ff0000</color>
     <color name="colorListBackground">#30000000</color>
+    <color name="colorYellow">#ffff00</color>
 
     // Type Colors
     <color name="colorBug">#A8B820</color>

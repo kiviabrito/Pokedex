@@ -2,7 +2,6 @@ package com.example.pokedex.db
 
 import androidx.room.*
 import com.example.pokedex.model.PokemonEntity
-import io.reactivex.Observable
 import io.reactivex.Single
 
 @Dao
@@ -12,13 +11,13 @@ interface PokemonDao {
   fun selectAll(): Single<List<PokemonEntity>>
 
   @Query("SELECT * FROM PokemonEntity WHERE id BETWEEN :from AND :to")
-  fun select20(from: Int, to:Int): Single<List<PokemonEntity>>
+  fun select20(from: Int, to: Int): Single<List<PokemonEntity>>
 
   @Query("SELECT * FROM PokemonEntity WHERE id LIKE :id LIMIT 1")
-  fun findById(id: String): Single<PokemonEntity>
+  fun findById(id: Int): Single<PokemonEntity>
 
-  @Query("SELECT * FROM PokemonEntity WHERE id LIKE :query OR id LIKE :query")
-  fun queryByIdAndName(query: String): Single<List<PokemonEntity>>
+  @Query("SELECT * FROM PokemonEntity WHERE name LIKE :query OR species LIKE :query")
+  fun queryByName(query: String): Single<List<PokemonEntity>>
 
   @Insert
   fun insertAll(pokemon: List<PokemonEntity>)

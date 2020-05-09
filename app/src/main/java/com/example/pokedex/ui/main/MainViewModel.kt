@@ -26,8 +26,12 @@ class MainViewModel(
   private val _pokemonList: MutableLiveData<ArrayList<PokemonEntity>> = MutableLiveData()
   val pokemonList: LiveData<ArrayList<PokemonEntity>> = _pokemonList
 
+  // Handle AutoComplete Data
+  private val _pokemonListAutoComplete: MutableLiveData<ArrayList<PokemonEntity>> = MutableLiveData()
+  val pokemonListAutoComplete: LiveData<ArrayList<PokemonEntity>> = _pokemonListAutoComplete
+
   fun getPokemonList(from: Int, to: Int) {
-    val disposable =  database.pokemonDao().select20(from = from, to = to)
+    val disposable = database.pokemonDao().select20(from = from, to = to)
       .subscribeOn(Schedulers.io())
       .observeOn(Schedulers.single())
       .subscribe({ list ->
@@ -74,7 +78,7 @@ class MainViewModel(
         .subscribeOn(Schedulers.computation())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe({}, { error ->
-          this.error.postValue( error.message)
+          this.error.postValue(error.message)
         })
       disposables.add(disposable)
     }
@@ -90,6 +94,20 @@ class MainViewModel(
     val entity = pokemon.createPokemonEntity()
     database.pokemonDao().upsert(entity)
     return entity
+  }
+
+  fun queryPokemon(query: String) {
+    val disposable = database.pokemonDao().queryByName("%$query%")
+      .subscribeOn(Schedulers.computation())
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe({ list ->
+        val arrayList = arrayListOf<PokemonEntity>()
+        list.sortedBy { it.id }.flatMapTo(arrayList) { arrayListOf(it) }
+        _pokemonListAutoComplete.postValue(arrayList)
+      }, { error ->
+        this.error.postValue(error.message)
+      })
+    disposables.add(disposable)
   }
 
   override fun onCleared() {

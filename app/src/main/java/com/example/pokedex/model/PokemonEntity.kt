@@ -63,9 +63,27 @@ class PokemonEntity(
         if (types != other.types) {
             return false
         }
-        if (height != other.height) {
+        if (weight != other.weight) {
             return false
         }
         return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id
+        result = 31 * result + name.hashCode()
+        result = 31 * result + photos.hashCode()
+        result = 31 * result + abilities.hashCode()
+        result = 31 * result + forms.hashCode()
+        result = 31 * result + height
+        result = 31 * result + held_items.hashCode()
+        result = 31 * result + is_default.hashCode()
+        result = 31 * result + moves.hashCode()
+        result = 31 * result + order
+        result = 31 * result + species.hashCode()
+        result = 31 * result + stats.hashCode()
+        result = 31 * result + types.hashCode()
+        result = 31 * result + weight
+        return result
     }
 }

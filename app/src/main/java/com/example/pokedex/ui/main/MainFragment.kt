@@ -3,8 +3,7 @@ package com.example.pokedex.ui.main
 import android.graphics.Color
 import android.os.Bundle
 import android.view.*
-import android.widget.EditText
-import android.widget.ImageView
+import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
@@ -15,7 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokedex.MainActivity
 import com.example.pokedex.R
-
+import com.example.pokedex.model.PokemonEntity
+import com.example.pokedex.utility.CustomListAdapter
 
 class MainFragment : Fragment() {
 
@@ -28,6 +28,7 @@ class MainFragment : Fragment() {
   private lateinit var root: View
   private lateinit var recyclerView: RecyclerView
   private lateinit var mainActivity: MainActivity
+  private var searchAutoComplete: AutoCompleteTextView? = null
   private val viewModel: MainViewModel by activityViewModels()
   private val adapter: PokemonAdapter by lazy {
     PokemonAdapter(ArrayList(), this)
@@ -60,23 +61,43 @@ class MainFragment : Fragment() {
     inflater.inflate(R.menu.search, menu)
     val searchItem = menu.findItem(R.id.action_search)
     val searchView = searchItem.actionView as SearchView
-    searchView.setBackgroundColor(Color.WHITE)
-    val editText = searchView.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
-    editText.setHintTextColor(Color.LTGRAY)
-    editText.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorPrimaryDark))
-    val clearIcon = searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
-    clearIcon.setColorFilter(ContextCompat.getColor(requireContext(), R.color.colorPrimaryDark))
+    searchAutoComplete = searchView.findViewById(androidx.appcompat.R.id.search_src_text)
+    searchAutoComplete?.let { autoComplete ->
+      autoComplete.setHintTextColor(Color.LTGRAY)
+      autoComplete.setTextColor(ContextCompat.getColor(context!!, R.color.colorPrimaryDark))
+      autoComplete.setDropDownBackgroundResource(R.drawable.rounded_corners)
+      autoComplete.setBackgroundColor(Color.WHITE)
+    }
+    setAutocompleteListeners(searchView)
+    super.onCreateOptionsMenu(menu, inflater)
+  }
 
+  private fun setAutocompleteListeners(searchView: SearchView) {
     searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
       override fun onQueryTextSubmit(query: String?): Boolean {
+        searchView.clearFocus()
         return true
       }
 
       override fun onQueryTextChange(newText: String?): Boolean {
-        // filter
+        newText?.let { text ->
+          searchAutoComplete?.let { autoComplete ->
+            if (text.length > 1 && (autoComplete.adapter == null || autoComplete.adapter.isEmpty)) {
+              viewModel.queryPokemon(newText)
+            }
+          }
+        }
         return false
       }
     })
+
+    searchAutoComplete?.setOnItemClickListener { parent, _, position, _ ->
+      val selectedPokemon = parent.adapter.getItem(position) as PokemonEntity?
+      if (selectedPokemon != null) {
+        println("open pokemon ${selectedPokemon.name}")
+        searchAutoComplete?.text?.clear()
+      }
+    }
   }
 
   private fun setupRecyclerView() {
@@ -92,6 +113,12 @@ class MainFragment : Fragment() {
   // MARK: Observers
 
   private fun observers() {
+    viewModel.pokemonListAutoComplete.observe(viewLifecycleOwner, Observer { list ->
+      mainActivity.showProgressBar(false)
+      val adapter = CustomListAdapter(context!!, R.layout.item_autocomplete_text, list)
+      searchAutoComplete?.setAdapter(adapter)
+    })
+
     viewModel.pokemonList.observe(viewLifecycleOwner, Observer { list ->
       mainActivity.showProgressBar(false)
       adapter.setItemsAdapter(list)
