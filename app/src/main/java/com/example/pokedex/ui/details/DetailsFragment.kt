@@ -122,10 +122,10 @@ class DetailsFragment : Fragment(){
     }
 
     root.ability_1.setOnClickListener {
-      showAbilityDescriptionDialog(pokemon, 0)
+      showAbilityDescriptionDialog(pokemon, 1)
     }
     root.ability_2.setOnClickListener {
-      showAbilityDescriptionDialog(pokemon, 1)
+      showAbilityDescriptionDialog(pokemon, 0)
     }
 
     // Types
