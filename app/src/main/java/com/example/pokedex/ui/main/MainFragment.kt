@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.pokedex.MainActivity
 import com.example.pokedex.MainViewModel
 import com.example.pokedex.R
@@ -19,6 +18,7 @@ import com.example.pokedex.model.PokemonEntity
 import com.example.pokedex.ui.details.DetailsFragment
 import com.example.pokedex.utility.CustomListAdapter
 import com.example.pokedex.utility.addOnScrolledToEnd
+import kotlinx.android.synthetic.main.main_fragment.view.*
 
 class MainFragment : Fragment() , PokemonDetailsView  {
 
@@ -29,7 +29,6 @@ class MainFragment : Fragment() , PokemonDetailsView  {
   }
 
   private lateinit var root: View
-  private lateinit var recyclerView: RecyclerView
   private lateinit var mainActivity: MainActivity
   private var searchAutoComplete: AutoCompleteTextView? = null
   private val viewModel: MainViewModel by activityViewModels()
@@ -47,7 +46,7 @@ class MainFragment : Fragment() , PokemonDetailsView  {
   private fun setupView() {
     setHasOptionsMenu(true)
     mainActivity = activity as MainActivity
-    mainActivity.supportActionBar?.title = "Pokemon"
+    mainActivity.changeTitle( getString(R.string.app_name) )
     mainActivity.showProgressBar(true)
     setupRecyclerView()
     observers()
@@ -60,7 +59,7 @@ class MainFragment : Fragment() , PokemonDetailsView  {
   }
 
   private fun setupRecyclerView() {
-    recyclerView = root.findViewById(R.id.pokemon_list)
+    val recyclerView = root.pokemon_list
     val layoutManager = LinearLayoutManager(requireContext())
     recyclerView.layoutManager = layoutManager
     adapter.pokemonDetailsView = this

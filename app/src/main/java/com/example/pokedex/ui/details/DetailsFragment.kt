@@ -30,7 +30,6 @@ class DetailsFragment : Fragment(){
   }
 
   private lateinit var root: View
-  private lateinit var recyclerView: RecyclerView
   private lateinit var mainActivity: MainActivity
   private val viewModel: MainViewModel by activityViewModels()
 
@@ -55,10 +54,9 @@ class DetailsFragment : Fragment(){
   }
 
   private fun setupRecyclerView() {
-    recyclerView = root.findViewById(R.id.pokemon_photo_list)
+    val recyclerView = root.pokemon_photo_list
     val layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
     recyclerView.layoutManager = layoutManager
-    recyclerView.adapter = PhotosAdapter(arrayListOf())
     // add pager behavior
     val snapHelper = PagerSnapHelper()
     snapHelper.attachToRecyclerView(recyclerView)
@@ -75,8 +73,8 @@ class DetailsFragment : Fragment(){
     })
 
     viewModel.error.observe(viewLifecycleOwner, Observer { error ->
-      root.progress_bar.visibility = View.GONE
       Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
+      root.progress_bar.visibility = View.GONE
     })
   }
 
@@ -84,6 +82,7 @@ class DetailsFragment : Fragment(){
 
   private fun populateView(pokemon: PokemonEntity) {
 
+    mainActivity.changeTitle( "#${String.format("%03d", pokemon.id)} - ${pokemon.name.capitalize()}" )
     root.pokemon_description_input.text = pokemon.description.replace("\n", " ")
 
     // Height and Weight
@@ -95,10 +94,8 @@ class DetailsFragment : Fragment(){
 
     // Photos
 
-    recyclerView.adapter = PhotosAdapter(pokemon.photos.filterNotNull())
-    mainActivity.supportActionBar?.title = "#${String.format("%03d", pokemon.id)} - ${pokemon.name.capitalize()}"
-    // pager indicator
-    recyclerView.addItemDecoration(LinePagerIndicatorDecoration())
+    root.pokemon_photo_list.adapter = PhotosAdapter(pokemon.photos.filterNotNull())
+    root.pokemon_photo_list.addItemDecoration(LinePagerIndicatorDecoration())
 
     // Category
 
@@ -130,7 +127,6 @@ class DetailsFragment : Fragment(){
     root.ability_2.setOnClickListener {
       showAbilityDescriptionDialog(pokemon, 1)
     }
-
 
     // Types
 
