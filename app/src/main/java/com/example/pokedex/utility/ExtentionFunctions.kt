@@ -8,6 +8,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokedex.R
 
+fun Int.toThreeDigString() : String {
+  return String.format("%03d", this)
+}
 
 fun RecyclerView.addOnScrolledToEnd(onScrolledToEnd: () -> Unit) {
 

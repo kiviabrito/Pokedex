@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.widget.AutoCompleteTextView
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
@@ -29,7 +30,6 @@ class MainFragment : Fragment() , PokemonDetailsView  {
   }
 
   private lateinit var root: View
-  private lateinit var mainActivity: MainActivity
   private var searchAutoComplete: AutoCompleteTextView? = null
   private val viewModel: MainViewModel by activityViewModels()
   private val adapter: PokemonAdapter by lazy { PokemonAdapter(ArrayList()) }
@@ -45,12 +45,11 @@ class MainFragment : Fragment() , PokemonDetailsView  {
 
   private fun setupView() {
     setHasOptionsMenu(true)
-    mainActivity = activity as MainActivity
-    mainActivity.changeTitle( getString(R.string.app_name) )
-    mainActivity.showProgressBar(true)
+    (activity as MainActivity).changeTitle( getString(R.string.app_name) )
     setupRecyclerView()
-    observers()
-    viewModel.getPokemonList(0, 20)
+    val progressBar = root.progress_bar
+    progressBar.visibility = View.VISIBLE
+    observers(progressBar)
   }
 
   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -71,21 +70,21 @@ class MainFragment : Fragment() , PokemonDetailsView  {
 
   // MARK: Observers
 
-  private fun observers() {
+  private fun observers(progressBar: ProgressBar) {
     viewModel.pokemonListAutoComplete.observe(viewLifecycleOwner, Observer { list ->
-      mainActivity.showProgressBar(false)
+      progressBar.visibility = View.GONE
       val adapter = CustomListAdapter(requireContext(), R.layout.item_autocomplete_text, list)
       searchAutoComplete?.setAdapter(adapter)
     })
 
     viewModel.pokemonList.observe(viewLifecycleOwner, Observer { list ->
-      mainActivity.showProgressBar(false)
+      progressBar.visibility = View.GONE
       adapter.setItemsAdapter(list)
     })
 
     viewModel.error.observe(viewLifecycleOwner, Observer { error ->
-      mainActivity.showProgressBar(false)
-      Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
+      progressBar.visibility = View.GONE
+      Toast.makeText(requireContext(), getString(R.string.error_message,error), Toast.LENGTH_LONG).show()
     })
   }
 
@@ -129,7 +128,6 @@ class MainFragment : Fragment() , PokemonDetailsView  {
     searchAutoComplete?.setOnItemClickListener { parent, _, position, _ ->
       val selectedPokemon = parent.adapter.getItem(position) as PokemonEntity?
       if (selectedPokemon != null) {
-        println("open pokemon ${selectedPokemon.name}")
         searchAutoComplete?.text?.clear()
         openPokemon(selectedPokemon.id)
       }
@@ -137,13 +135,13 @@ class MainFragment : Fragment() , PokemonDetailsView  {
   }
 
   override fun openPokemon(id: Int) {
-    if (mainActivity.supportFragmentManager.findFragmentByTag("DetailsFragment") == null) {
+    if (parentFragmentManager.findFragmentByTag(getString(R.string.details_fragment_tag)) == null) {
       val bundle = Bundle()
-      bundle.putInt("ID",id )
+      bundle.putInt(getString(R.string.id_bun),id )
       val detailsFragment = DetailsFragment.newInstance()
       detailsFragment.arguments = bundle
-      mainActivity.supportFragmentManager.beginTransaction()
-        .replace(R.id.container, detailsFragment, "DetailsFragment")
+      parentFragmentManager.beginTransaction()
+        .replace(R.id.container, detailsFragment, getString(R.string.details_fragment_tag))
         .addToBackStack(null)
         .commit()
     }

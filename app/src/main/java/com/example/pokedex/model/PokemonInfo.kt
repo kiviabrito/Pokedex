@@ -1,5 +1,7 @@
 package com.example.pokedex.model
 
+import com.example.pokedex.utility.toThreeDigString
+
 class PokemonInfo(
     val abilities: List<Ability>,
     val base_experience: Int,
@@ -43,7 +45,7 @@ class PokemonInfo(
         this.types.forEach { type ->
             types.add(type.type.name)
         }
-        val photoId = String.format("%03d", this.id)
+        val photoId = this.id.toThreeDigString()
         return PokemonEntity(
             id = this.id,
             name = this.name,

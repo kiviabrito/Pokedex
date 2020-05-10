@@ -1,6 +1,5 @@
 package com.example.pokedex
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -30,9 +29,13 @@ class MainViewModel(
   private val _pokemonListAutoComplete: MutableLiveData<ArrayList<PokemonEntity>> = MutableLiveData()
   val pokemonListAutoComplete: LiveData<ArrayList<PokemonEntity>> = _pokemonListAutoComplete
 
-  // Handle RecyclerView Data
+  // Handle Details Fragment Data
   private val _pokemonDetails: MutableLiveData<PokemonEntity> = MutableLiveData()
   val pokemonDetails: LiveData<PokemonEntity> = _pokemonDetails
+
+  init {
+    getPokemonList(0, 20)
+  }
 
   fun getPokemonList(from: Int, to: Int) {
     val disposable = database.pokemonDao().select20(from = from, to = to)
@@ -45,7 +48,7 @@ class MainViewModel(
           fetchFirst20PokemonList()
         }
       }, { error ->
-        println("Error ${error.message}")
+        this.error.postValue(error.message)
       })
     disposables.add(disposable)
   }
@@ -54,8 +57,8 @@ class MainViewModel(
     val firstList = mutableListOf<PokemonEntity>()
     for (i in 1 until 21) {
       val disposable = service.requestPokemon(i)
-        .map { pokemon ->
-          updateDataBase(pokemon)
+        .map { pokemonInfo ->
+          updateDataBase(pokemonInfo)
         }
         .subscribeOn(Schedulers.io())
         .observeOn(mainThread())
@@ -76,8 +79,8 @@ class MainViewModel(
   private fun fetchAllPokemonList() {
     for (i in 20 until 808) {
       val disposable = service.requestPokemon(i)
-        .map { pokemon ->
-          updateDataBase(pokemon)
+        .map { pokemonInfo ->
+          updateDataBase(pokemonInfo)
         }
         .subscribeOn(Schedulers.computation())
         .observeOn(mainThread())
@@ -94,7 +97,7 @@ class MainViewModel(
     _pokemonList.postValue(arrayList)
   }
 
-  fun updateDataBase(pokemon: PokemonInfo): PokemonEntity {
+  private fun updateDataBase(pokemon: PokemonInfo): PokemonEntity {
     val entity = pokemon.createPokemonEntity()
     database.pokemonDao().upsert(entity)
     return entity
@@ -130,25 +133,22 @@ class MainViewModel(
       .subscribe({ pokemon ->
         _pokemonDetails.postValue(pokemon)
       }, { error ->
-        println("Error ${error.message}")
+        this.error.postValue(error.message)
       })
     disposables.add(disposable)
   }
 
-  @SuppressLint("CheckResult")
   private fun setPokemonAbilities(pokemon: PokemonEntity) {
     try {
-      // Pokemon Ability 1
-      val path1 = pokemon.abilities[0].url.substringAfter("ability/")
-      val ability1 = service.requestAbility(path1).blockingGet()
-      ability1.flavor_text_entries.find { it.language.name == "en" }?.let {
+      val firstPath = pokemon.abilities[0].url.substringAfter("ability/")
+      val firstAbility = service.requestAbility(firstPath).blockingGet()
+      firstAbility.flavor_text_entries.find { it.language.name == "en" }?.let {
         pokemon.abilities[0].url = it.flavor_text
       }
-      // Pokemon Ability 2 in case it exists
       if (pokemon.abilities.size > 1) {
-        val path2 = pokemon.abilities[1].url.substringAfter("ability/")
-        val ability2 = service.requestAbility(path2).blockingGet()
-        ability2.flavor_text_entries.find { it.language.name == "en" }?.let {
+        val secondPath = pokemon.abilities[1].url.substringAfter("ability/")
+        val secondAbility = service.requestAbility(secondPath).blockingGet()
+        secondAbility.flavor_text_entries.find { it.language.name == "en" }?.let {
           pokemon.abilities[1].url = it.flavor_text
         }
       }
@@ -157,20 +157,17 @@ class MainViewModel(
     }
   }
 
-  @SuppressLint("CheckResult")
   private fun setPokemonSpecies(id: Int, pokemon: PokemonEntity) {
     try {
       val species = service.requestSpecies(id).blockingGet()
-      // Pokemon Description
       species.flavor_text_entries.find { it.language.name == "en" }?.let { flavor ->
         pokemon.description = flavor.flavor_text
       }
-      // Pokemon Category
       species.genera.find { it.language.name == "en" }?.let { gerera ->
         pokemon.category = gerera.genus
       }
     } catch (e: Exception) {
-      error.postValue(e.message)
+      this.error.postValue(e.message)
     }
   }
 

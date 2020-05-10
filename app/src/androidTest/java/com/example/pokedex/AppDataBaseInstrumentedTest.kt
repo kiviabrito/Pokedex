@@ -4,7 +4,7 @@ import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.pokedex.db.AppDatabase
-import com.example.pokedex.utility.PokemonFactory
+import com.example.pokedex.utility.test.PokemonFactory
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -43,7 +43,7 @@ class AppDataBaseInstrumentedTest {
 
   @Test
   fun insertPokemon() {
-    val pokemon = PokemonFactory().createPokemonEntity(1)
+    val pokemon = PokemonFactory.createPokemonEntity(1)
     database.pokemonDao().upsert(pokemon)
     val pokemonList = database.pokemonDao().selectAll()
     assert(pokemonList.blockingGet().isNotEmpty())
@@ -51,7 +51,7 @@ class AppDataBaseInstrumentedTest {
 
   @Test
   fun getPokemonData() {
-    val cachedPokemon = PokemonFactory().createPokemonEntityList(3)
+    val cachedPokemon = PokemonFactory.createPokemonEntityList(3)
     cachedPokemon.forEach {
       database.pokemonDao().upsert(it)
     }
@@ -61,7 +61,7 @@ class AppDataBaseInstrumentedTest {
 
   @Test
   fun clearPokemonData() {
-    val pokemon = PokemonFactory().createPokemonEntity(1)
+    val pokemon = PokemonFactory.createPokemonEntity(1)
     database.pokemonDao().upsert(pokemon)
     database.pokemonDao().delete(pokemon)
     assert(database.pokemonDao().selectAll().blockingGet().isEmpty())

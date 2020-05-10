@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.example.pokedex.R
 import com.example.pokedex.model.PokemonEntity
 import com.example.pokedex.utility.setBackgroundColor
+import com.example.pokedex.utility.toThreeDigString
 import java.util.*
 
 interface PokemonDetailsView {
@@ -67,9 +68,7 @@ class PokemonAdapter(private var items: ArrayList<PokemonEntity>) :
       val type2TextView: TextView = itemView.findViewById(R.id.type_2) as TextView
 
       nameTextView.text = item.name.toUpperCase(Locale.ROOT)
-      idTextView.text = "#${String.format("%03d", item.id)}"
-
-      val photoId = String.format("%03d", item.id)
+      idTextView.text = "#${item.id.toThreeDigString()}"
 
       Glide.with(itemView.context)
         .load(item.photos[0])
