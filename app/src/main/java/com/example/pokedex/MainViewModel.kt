@@ -94,7 +94,7 @@ class MainViewModel(
     _pokemonList.postValue(arrayList)
   }
 
-  private fun updateDataBase(pokemon: PokemonInfo): PokemonEntity {
+  fun updateDataBase(pokemon: PokemonInfo): PokemonEntity {
     val entity = pokemon.createPokemonEntity()
     database.pokemonDao().upsert(entity)
     return entity

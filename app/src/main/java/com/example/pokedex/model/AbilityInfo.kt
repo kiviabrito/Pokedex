@@ -2,7 +2,7 @@ package com.example.pokedex.model
 
 class AbilityInfo(
   val effect_changes: List<AbilityEffectChange>,
-  val effect_entries: List<EffectEntriesSort>,
+  val effect_entries: List<VerboseEffect>,
   val flavor_text_entries: List<Flavor>,
   val generation: Detail,
   val id: Int,
@@ -13,16 +13,16 @@ class AbilityInfo(
 )
 
 data class AbilityEffectChange(
-  val effect_entries: List<EffectEntries>,
+  val effect_entries: List<Effect>,
   val version_group: Detail
 )
 
-data class EffectEntries(
+data class Effect(
   val effect: String,
   val language: Detail
 )
 
-data class EffectEntriesSort(
+data class VerboseEffect(
   val effect: String,
   val language: Detail,
   val short_effect: String
