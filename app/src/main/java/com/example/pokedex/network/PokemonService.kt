@@ -1,5 +1,6 @@
 package com.example.pokedex.network
 
+import com.example.pokedex.model.AbilityInfo
 import com.example.pokedex.model.EvolutionChain
 import com.example.pokedex.model.PokemonInfo
 import com.example.pokedex.model.Species
@@ -17,6 +18,9 @@ interface PokemonService {
 
     @GET("pokemon-species/{id}/")
     fun requestSpecies(@Path("id") id: Int): Single<Species>
+
+    @GET("ability/{path}")
+    fun requestAbility(@Path("path") path: String): Single<AbilityInfo>
 
     @GET("evolution-chain/{id}/")
     fun requestEvolution(@Path("id") id: Int): Single<EvolutionChain>

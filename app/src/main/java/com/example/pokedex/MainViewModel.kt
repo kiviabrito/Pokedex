@@ -1,5 +1,6 @@
 package com.example.pokedex
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,7 +9,7 @@ import com.example.pokedex.model.PokemonEntity
 import com.example.pokedex.model.PokemonInfo
 import com.example.pokedex.network.PokemonService
 import com.example.pokedex.utility.SingleLiveData
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
@@ -57,7 +58,7 @@ class MainViewModel(
           updateDataBase(pokemon)
         }
         .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
+        .observeOn(mainThread())
         .subscribe({ pokemon ->
           firstList.add(pokemon)
           if (firstList.size == 19) {
@@ -79,7 +80,7 @@ class MainViewModel(
           updateDataBase(pokemon)
         }
         .subscribeOn(Schedulers.computation())
-        .observeOn(AndroidSchedulers.mainThread())
+        .observeOn(mainThread())
         .subscribe({}, { error ->
           this.error.postValue(error.message)
         })
@@ -102,7 +103,7 @@ class MainViewModel(
   fun queryPokemon(query: String) {
     val disposable = database.pokemonDao().queryByIdAndName("%$query%")
       .subscribeOn(Schedulers.computation())
-      .observeOn(AndroidSchedulers.mainThread())
+      .observeOn(mainThread())
       .subscribe({ list ->
         val arrayList = arrayListOf<PokemonEntity>()
         list.sortedBy { it.id }.flatMapTo(arrayList) { arrayListOf(it) }
@@ -115,14 +116,62 @@ class MainViewModel(
 
   fun getPokemonById(id: Int) {
     val disposable = database.pokemonDao().findById(id)
+      .map { pokemon ->
+        if (pokemon.description == "") {
+          setPokemonSpecies(id, pokemon)
+          setPokemonAbilities(pokemon)
+          database.pokemonDao().upsert(pokemon)
+        }
+        pokemon
+      }
+      .onErrorReturn { database.pokemonDao().findById(id).blockingGet() }
       .subscribeOn(Schedulers.io())
-      .observeOn(Schedulers.single())
+      .observeOn(mainThread())
       .subscribe({ pokemon ->
         _pokemonDetails.postValue(pokemon)
       }, { error ->
         println("Error ${error.message}")
       })
     disposables.add(disposable)
+  }
+
+  @SuppressLint("CheckResult")
+  private fun setPokemonAbilities(pokemon: PokemonEntity) {
+    try {
+      // Pokemon Ability 1
+      val path1 = pokemon.abilities[0].url.substringAfter("ability/")
+      val ability1 = service.requestAbility(path1).blockingGet()
+      ability1.flavor_text_entries.find { it.language.name == "en" }?.let {
+        pokemon.abilities[0].url = it.flavor_text
+      }
+      // Pokemon Ability 2 in case it exists
+      if (pokemon.abilities.size > 1) {
+        val path2 = pokemon.abilities[1].url.substringAfter("ability/")
+        val ability2 = service.requestAbility(path2).blockingGet()
+        ability2.flavor_text_entries.find { it.language.name == "en" }?.let {
+          pokemon.abilities[1].url = it.flavor_text
+        }
+      }
+    } catch (e: Exception) {
+      error.postValue(e.message)
+    }
+  }
+
+  @SuppressLint("CheckResult")
+  private fun setPokemonSpecies(id: Int, pokemon: PokemonEntity) {
+    try {
+      val species = service.requestSpecies(id).blockingGet()
+      // Pokemon Description
+      species.flavor_text_entries.find { it.language.name == "en" }?.let { flavor ->
+        pokemon.description = flavor.flavor_text
+      }
+      // Pokemon Category
+      species.genera.find { it.language.name == "en" }?.let { gerera ->
+        pokemon.category = gerera.genus
+      }
+    } catch (e: Exception) {
+      error.postValue(e.message)
+    }
   }
 
   override fun onCleared() {

@@ -9,8 +9,8 @@ class PokemonEntity(
     val id: Int,
     val name: String,
     val photos: List<String?>,
-    val abilities: List<String>,
-    val forms: List<String>, // NOT HIDDEN
+    var abilities: List<Detail>,
+    val forms: List<String>,
     val height: Int,
     val held_items: List<String>,
     val is_default: Boolean,
@@ -19,7 +19,9 @@ class PokemonEntity(
     val species: String,
     val stats: List<Stat>,
     val types: List<String>,
-    val weight: Int
+    val weight: Int,
+    var category: String,
+    var description: String
 ) {
     override fun equals(other: Any?): Boolean {
         other as PokemonEntity
@@ -64,6 +66,9 @@ class PokemonEntity(
             return false
         }
         if (weight != other.weight) {
+            return false
+        }
+        if (description != other.description) {
             return false
         }
         return true

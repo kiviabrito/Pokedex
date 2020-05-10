@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -45,18 +45,19 @@ class DetailsFragment : Fragment(){
   private fun setupView() {
     mainActivity = activity as MainActivity
     val id = arguments?.getInt("ID")
-    mainActivity.showProgressBar(true)
     setupRecyclerView()
-    observers()
     id?.let {
+      root.progress_bar.visibility = View.VISIBLE
+      observers(it)
       viewModel.getPokemonById(it)
     }
   }
 
   private fun setupRecyclerView() {
     recyclerView = root.findViewById(R.id.pokemon_photo_list)
-    val layoutManager = LinearLayoutManager(requireContext(), LinearLayout.HORIZONTAL, false)
+    val layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
     recyclerView.layoutManager = layoutManager
+    recyclerView.adapter = PhotosAdapter(arrayListOf())
     // add pager behavior
     val snapHelper = PagerSnapHelper()
     snapHelper.attachToRecyclerView(recyclerView)
@@ -64,16 +65,26 @@ class DetailsFragment : Fragment(){
 
   // MARK: Observers
 
-  private fun observers() {
+  private fun observers(id: Int) {
     viewModel.pokemonDetails.observe(viewLifecycleOwner, Observer { pokemon ->
-      mainActivity.showProgressBar(false)
-      populateView(pokemon)
+      if (pokemon.id == id) {
+        populateView(pokemon)
+        root.progress_bar.visibility = View.GONE
+      }
+    })
+
+    viewModel.error.observe(viewLifecycleOwner, Observer { error ->
+      root.progress_bar.visibility = View.GONE
+      Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show()
     })
   }
 
   // MARK: Helper Functions
 
   private fun populateView(pokemon: PokemonEntity) {
+
+    root.pokemon_description.text = pokemon.description.replace("\n", " ")
+
     // Height and Weight
 
     val height = (pokemon.height.toDouble()/10)
@@ -121,13 +132,13 @@ class DetailsFragment : Fragment(){
       1 -> {
         root.ability_1.visibility = View.VISIBLE
         root.ability_2.visibility = View.GONE
-        root.ability_1.text = pokemon.abilities[0].capitalize()
+        root.ability_1.text = pokemon.abilities[0].name.capitalize()
       }
       2 -> {
         root.ability_1.visibility = View.VISIBLE
         root.ability_2.visibility = View.VISIBLE
-        root.ability_1.text = pokemon.abilities[1].capitalize()
-        root.ability_2.text = pokemon.abilities[0].capitalize()
+        root.ability_1.text = pokemon.abilities[1].name.capitalize()
+        root.ability_2.text = pokemon.abilities[0].name.capitalize()
       }
     }
 

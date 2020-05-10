@@ -20,10 +20,11 @@ class PokemonInfo(
     val weight: Int
 ) {
     fun createPokemonEntity(): PokemonEntity {
-        val abilities = mutableListOf<String>()
+        val abilities = mutableListOf<Detail>()
         this.abilities.forEach { ability ->
             if (ability.is_hidden.not()) {
-                abilities.add(ability.ability.name)
+                val detail = Detail(name = ability.ability.name, url = ability.ability.url)
+                abilities.add(detail)
             }
         }
         val forms = mutableListOf<String>()
@@ -65,7 +66,9 @@ class PokemonInfo(
             species = this.species.name,
             stats = this.stats,
             types = types,
-            weight = this.weight
+            weight = this.weight,
+            category = "",
+            description = ""
         )
     }
 }
@@ -126,5 +129,5 @@ data class Type(
 
 data class Detail(
     val name: String,
-    val url: String
+    var url: String
 )
