@@ -1,5 +1,6 @@
 package com.example.pokedex.ui.details
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -83,7 +84,7 @@ class DetailsFragment : Fragment(){
 
   private fun populateView(pokemon: PokemonEntity) {
 
-    root.pokemon_description.text = pokemon.description.replace("\n", " ")
+    root.pokemon_description_input.text = pokemon.description.replace("\n", " ")
 
     // Height and Weight
 
@@ -95,9 +96,41 @@ class DetailsFragment : Fragment(){
     // Photos
 
     recyclerView.adapter = PhotosAdapter(pokemon.photos.filterNotNull())
-    mainActivity.supportActionBar?.title = "${pokemon.name.capitalize()} - #${pokemon.id}"
+    mainActivity.supportActionBar?.title = "#${String.format("%03d", pokemon.id)} - ${pokemon.name.capitalize()}"
     // pager indicator
     recyclerView.addItemDecoration(LinePagerIndicatorDecoration())
+
+    // Category
+
+    root.category1.text = pokemon.category.capitalize()
+
+    // Abilities
+
+    when (pokemon.abilities.count()) {
+      0 -> {
+        root.ability_1.visibility = View.GONE
+        root.ability_2.visibility = View.GONE
+      }
+      1 -> {
+        root.ability_1.visibility = View.VISIBLE
+        root.ability_2.visibility = View.GONE
+        root.ability_1.text = pokemon.abilities[0].name.capitalize() + "  "
+      }
+      2 -> {
+        root.ability_1.visibility = View.VISIBLE
+        root.ability_2.visibility = View.VISIBLE
+        root.ability_1.text = pokemon.abilities[1].name.capitalize() + "  "
+        root.ability_2.text = pokemon.abilities[0].name.capitalize() + "  "
+      }
+    }
+
+    root.ability_1.setOnClickListener {
+      showAbilityDescriptionDialog(pokemon, 0)
+    }
+    root.ability_2.setOnClickListener {
+      showAbilityDescriptionDialog(pokemon, 1)
+    }
+
 
     // Types
 
@@ -122,26 +155,6 @@ class DetailsFragment : Fragment(){
       }
     }
 
-    // Abilities
-
-    when (pokemon.abilities.count()) {
-      0 -> {
-        root.ability_1.visibility = View.GONE
-        root.ability_2.visibility = View.GONE
-      }
-      1 -> {
-        root.ability_1.visibility = View.VISIBLE
-        root.ability_2.visibility = View.GONE
-        root.ability_1.text = pokemon.abilities[0].name.capitalize()
-      }
-      2 -> {
-        root.ability_1.visibility = View.VISIBLE
-        root.ability_2.visibility = View.VISIBLE
-        root.ability_1.text = pokemon.abilities[1].name.capitalize()
-        root.ability_2.text = pokemon.abilities[0].name.capitalize()
-      }
-    }
-
     // Stats
 
     root.speed_input.text = pokemon.stats[0].base_stat.toString()
@@ -151,6 +164,16 @@ class DetailsFragment : Fragment(){
     root.attach_input.text = pokemon.stats[4].base_stat.toString()
     root.hp_input.text = pokemon.stats[5].base_stat.toString()
 
+  }
+
+  private fun showAbilityDescriptionDialog(pokemon: PokemonEntity, index: Int) {
+    AlertDialog.Builder(requireContext())
+      .setMessage(pokemon.abilities[index].url.replace("\n", " "))
+      .setTitle(pokemon.abilities[index].name.capitalize())
+      .setPositiveButton("OK") { dialog, _ ->
+        dialog.cancel()
+      }
+      .show()
   }
 
 }

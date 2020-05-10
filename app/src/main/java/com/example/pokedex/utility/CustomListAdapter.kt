@@ -36,7 +36,7 @@ class CustomListAdapter(context: Context, @LayoutRes private val layoutResource:
     val pokemonName: TextView = view.findViewById(R.id.pokemon_name) as TextView
 
     val pokemon = pokemonList[position]
-    pokemonName.text = "#${pokemon.id} - ${pokemon.name.capitalize(Locale.ROOT)}"
+    pokemonName.text = "#${String.format("%03d", pokemon.id)} - ${pokemon.name.capitalize(Locale.ROOT)}"
     Glide.with(context)
       .load(pokemon.photos[0])
       .into(pokemonPhoto)

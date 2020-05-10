@@ -38,24 +38,27 @@ class PhotosAdapter(private val urlList: List<String>) : RecyclerView.Adapter<Ph
           textView.text = "Front Default"
         }
         1 -> {
-          textView.text = "Back Default"
+          textView.text = "Front Default"
         }
         2 -> {
-          textView.text = "Front Shiny"
+          textView.text = "Back Default"
         }
         3 -> {
-          textView.text = "Back Shiny"
+          textView.text = "Front Shiny"
         }
         4 -> {
-          textView.text = "Front Female"
+          textView.text = "Back Shiny"
         }
         5 -> {
-          textView.text = "Back Female"
+          textView.text = "Front Female"
         }
         6 -> {
-          textView.text = "Front Shiny Female"
+          textView.text = "Back Female"
         }
         7 -> {
+          textView.text = "Front Shiny Female"
+        }
+        8 -> {
           textView.text = "Back Shiny Female"
         }
       }

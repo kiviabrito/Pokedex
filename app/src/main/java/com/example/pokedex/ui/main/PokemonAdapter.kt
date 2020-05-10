@@ -67,7 +67,9 @@ class PokemonAdapter(private var items: ArrayList<PokemonEntity>) :
       val type2TextView: TextView = itemView.findViewById(R.id.type_2) as TextView
 
       nameTextView.text = item.name.toUpperCase(Locale.ROOT)
-      idTextView.text = "#${item.id}"
+      idTextView.text = "#${String.format("%03d", item.id)}"
+
+      val photoId = String.format("%03d", item.id)
 
       Glide.with(itemView.context)
         .load(item.photos[0])

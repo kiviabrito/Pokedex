@@ -43,10 +43,12 @@ class PokemonInfo(
         this.types.forEach { type ->
             types.add(type.type.name)
         }
+        val photoId = String.format("%03d", this.id)
         return PokemonEntity(
             id = this.id,
             name = this.name,
             photos = listOf(
+                "https://assets.pokemon.com/assets/cms2/img/pokedex/full/$photoId.png",
                 this.sprites.front_default,
                 this.sprites.back_default,
                 this.sprites.front_shiny,

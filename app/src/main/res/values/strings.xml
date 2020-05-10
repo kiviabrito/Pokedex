@@ -13,4 +13,6 @@
   <string name="height">Height:</string>
   <string name="weight">Weight:</string>
   <string name="stats">Stats:</string>
+  <string name="category">Category:</string>
+  <string name="pokemon_description">Pokemon Description:</string>
 </resources>
