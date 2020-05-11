@@ -35,31 +35,31 @@ class PhotosAdapter(private val urlList: List<String>) : RecyclerView.Adapter<Ph
 
       when (position) {
         0 -> {
-          textView.text = "Front Default"
+          textView.text = itemView.context.getString(R.string.front_default)
         }
         1 -> {
-          textView.text = "Front Default"
+          textView.text = itemView.context.getString(R.string.front_default)
         }
         2 -> {
-          textView.text = "Back Default"
+          textView.text = itemView.context.getString(R.string.back_default)
         }
         3 -> {
-          textView.text = "Front Shiny"
+          textView.text = itemView.context.getString(R.string.front_shiny)
         }
         4 -> {
-          textView.text = "Back Shiny"
+          textView.text = itemView.context.getString(R.string.back_shiny)
         }
         5 -> {
-          textView.text = "Front Female"
+          textView.text = itemView.context.getString(R.string.front_female)
         }
         6 -> {
-          textView.text = "Back Female"
+          textView.text = itemView.context.getString(R.string.back_female)
         }
         7 -> {
-          textView.text = "Front Shiny Female"
+          textView.text = itemView.context.getString(R.string.front_shiny_female)
         }
         8 -> {
-          textView.text = "Back Shiny Female"
+          textView.text = itemView.context.getString(R.string.back_shiny_female)
         }
       }
     }

@@ -32,10 +32,6 @@ class PokemonAdapter(private var items: ArrayList<PokemonEntity>) :
     return items.size
   }
 
-  fun getItem(position: Int): PokemonEntity {
-    return items[position]
-  }
-
   fun setItemsAdapter(newList: ArrayList<PokemonEntity>) {
     val oldList = items
     val futureList = arrayListOf<PokemonEntity>()

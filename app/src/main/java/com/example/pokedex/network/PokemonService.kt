@@ -1,9 +1,8 @@
 package com.example.pokedex.network
 
 import com.example.pokedex.model.AbilityInfo
-import com.example.pokedex.model.EvolutionChain
 import com.example.pokedex.model.PokemonInfo
-import com.example.pokedex.model.Species
+import com.example.pokedex.model.SpeciesInfo
 import io.reactivex.Single
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -17,13 +16,10 @@ interface PokemonService {
     fun requestPokemon(@Path("id") id: Int): Single<PokemonInfo>
 
     @GET("pokemon-species/{id}/")
-    fun requestSpecies(@Path("id") id: Int): Single<Species>
+    fun requestSpecies(@Path("id") id: Int): Single<SpeciesInfo>
 
     @GET("ability/{path}")
     fun requestAbility(@Path("path") path: String): Single<AbilityInfo>
-
-    @GET("evolution-chain/{id}/")
-    fun requestEvolution(@Path("id") id: Int): Single<EvolutionChain>
 
     companion object {
         fun create(): PokemonService {
