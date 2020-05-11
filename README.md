@@ -40,9 +40,12 @@ For the view it is using one Activity, which is hosting two fragments (MainFragm
 - MainFragment : 
 
 It is displaying the list of Pokemon(picture, types, id and name) and a search button.
+![alt text](https://github.com/kiviabrito/Pokedex/blob/master/Screenshot_20200510-215802.png) 
+
 - DetailsFragment :
 
 It is displaying the Pokemon information.
+![alt text](https://github.com/kiviabrito/Pokedex/blob/master/Screenshot_20200510-215810.png) 
 
 ## Executar o app
 
