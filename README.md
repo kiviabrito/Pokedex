@@ -1,4 +1,4 @@
-# Pokédex Android App em Kotlin
+# Pokédex Android App - Kotlin
 
 ## Functionality
 
