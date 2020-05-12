@@ -1,4 +1,4 @@
-# Pokédex Android App em Kotlin
+# Pokédex Android App - Kotlin
 
 ## Functionality
 
@@ -40,11 +40,15 @@ For the view it is using one Activity, which is hosting two fragments (MainFragm
 - MainFragment : 
 
 It is displaying the list of Pokemon(picture, types, id and name) and a search button.
+
+
 ![alt text](https://github.com/kiviabrito/Pokedex/blob/master/Screenshot_MainFragment.png) 
 
 - DetailsFragment :
 
 It is displaying the Pokemon information.
+
+
 ![alt text](https://github.com/kiviabrito/Pokedex/blob/master/Screenshot_DetailsFragment.png) 
 
 ## Executar o app
