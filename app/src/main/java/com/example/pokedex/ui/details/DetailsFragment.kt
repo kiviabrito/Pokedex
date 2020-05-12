@@ -20,7 +20,7 @@ import com.example.pokedex.model.PokemonEntity
 import com.example.pokedex.utility.LinePagerIndicatorDecoration
 import com.example.pokedex.utility.setBackgroundColor
 import com.example.pokedex.utility.toThreeDigString
-import kotlinx.android.synthetic.main.details_fragment.view.*
+import kotlinx.android.synthetic.main.fragment_details.view.*
 
 
 class DetailsFragment : Fragment(){
@@ -28,7 +28,16 @@ class DetailsFragment : Fragment(){
   // MARK: Init
 
   companion object {
-    fun newInstance() = DetailsFragment()
+    private const val ID = "id"
+
+    @JvmStatic
+    fun newInstance(id: Int): DetailsFragment {
+      return DetailsFragment().apply {
+        arguments = Bundle().apply {
+          putInt(ID, id)
+        }
+      }
+    }
   }
 
   private lateinit var root: View
@@ -38,13 +47,13 @@ class DetailsFragment : Fragment(){
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
-    root = inflater.inflate(R.layout.details_fragment, container, false)
+    root = inflater.inflate(R.layout.fragment_details, container, false)
     setupView()
     return root
   }
 
   private fun setupView() {
-    val id = arguments?.getInt(getString(R.string.id_bun))
+    val id = arguments?.getInt(ID)
     setupRecyclerView()
     id?.let {
       val progressBar = root.progress_bar
@@ -132,7 +141,7 @@ class DetailsFragment : Fragment(){
     AlertDialog.Builder(requireContext())
       .setMessage(pokemon.abilities[index].url.replace("\n", " "))
       .setTitle(pokemon.abilities[index].name.capitalize())
-      .setPositiveButton(getString(R.string.ok_btn)) { dialog, _ ->
+      .setPositiveButton(getString(android.R.string.ok)) { dialog, _ ->
         dialog.cancel()
       }
       .show()

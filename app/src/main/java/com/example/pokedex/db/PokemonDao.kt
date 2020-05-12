@@ -19,9 +19,6 @@ interface PokemonDao {
   @Query("SELECT * FROM PokemonEntity WHERE id LIKE :query OR name LIKE :query OR species LIKE :query")
   fun queryByIdAndName(query: String): Single<List<PokemonEntity>>
 
-  @Insert
-  fun insertAll(pokemon: List<PokemonEntity>)
-
   @Delete
   fun delete(pokemon: PokemonEntity)
 

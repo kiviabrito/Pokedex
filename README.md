@@ -12,7 +12,7 @@ Some os the components used are:
 - Room DataBase - for local caching.
 - RxJava - for tasks on the background, as network calls and access to database.
 - Retrofit - for the network calls.
-- Gson - for the serialization.
+- Gson - for the deserialization.
 - Glide - for image loading and cache.
 - RecyclerView - for displaying list of Pokemon and Photos.
 - ConstraintLayout - for the layout design.
@@ -50,5 +50,5 @@ It is displaying the Pokemon information.
 ## Executar o app
 
 No update is necessary, you can just clone the project and run it.
-#### Note: For the app work on the offiline mode it is necessary that the user has had at least one access with the internet connected, so it can fetch the data from the network and store it on the local data base.
+#### Note: For the app work on the offline mode it is necessary that the user has had at least one access with the internet connected, so it can fetch the data from the network and store it on the local data base.
 

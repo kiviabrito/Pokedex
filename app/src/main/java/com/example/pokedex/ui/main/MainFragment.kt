@@ -19,7 +19,7 @@ import com.example.pokedex.model.PokemonEntity
 import com.example.pokedex.ui.details.DetailsFragment
 import com.example.pokedex.utility.CustomListAdapter
 import com.example.pokedex.utility.addOnScrolledToEnd
-import kotlinx.android.synthetic.main.main_fragment.view.*
+import kotlinx.android.synthetic.main.fragment_main.view.*
 
 class MainFragment : Fragment() , PokemonDetailsView  {
 
@@ -38,7 +38,7 @@ class MainFragment : Fragment() , PokemonDetailsView  {
     inflater: LayoutInflater, container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View {
-    root = inflater.inflate(R.layout.main_fragment, container, false)
+    root = inflater.inflate(R.layout.fragment_main, container, false)
     setupView()
     return root
   }
@@ -136,12 +136,8 @@ class MainFragment : Fragment() , PokemonDetailsView  {
 
   override fun openPokemon(id: Int) {
     if (parentFragmentManager.findFragmentByTag(getString(R.string.details_fragment_tag)) == null) {
-      val bundle = Bundle()
-      bundle.putInt(getString(R.string.id_bun),id )
-      val detailsFragment = DetailsFragment.newInstance()
-      detailsFragment.arguments = bundle
       parentFragmentManager.beginTransaction()
-        .replace(R.id.container, detailsFragment, getString(R.string.details_fragment_tag))
+        .replace(R.id.container, DetailsFragment.newInstance(id), getString(R.string.details_fragment_tag))
         .addToBackStack(null)
         .commit()
     }

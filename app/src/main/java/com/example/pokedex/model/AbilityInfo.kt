@@ -1,6 +1,6 @@
 package com.example.pokedex.model
 
-class AbilityInfo(
+data class AbilityInfo(
   val effect_changes: List<AbilityEffectChange>,
   val effect_entries: List<VerboseEffect>,
   val flavor_text_entries: List<Flavor>,

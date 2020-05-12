@@ -33,7 +33,5 @@
 
   // Others
   <string name="details_fragment_tag">DetailsFragment</string>
-  <string name="id_bun">ID</string>
-  <string name="ok_btn">OK</string>
 
 </resources>

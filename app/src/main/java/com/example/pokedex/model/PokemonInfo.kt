@@ -2,7 +2,7 @@ package com.example.pokedex.model
 
 import com.example.pokedex.utility.toThreeDigString
 
-class PokemonInfo(
+data class PokemonInfo(
     val abilities: List<Ability>,
     val base_experience: Int,
     val forms: List<Detail>,
