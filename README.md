@@ -32,7 +32,7 @@ Three different models were used in this project for the API calls:
 - [ ] https://pokeapi.co/api/v2/ability/{path} ->
 - AbilityInfo - with the information about the ability with the path = {path}
 
-Retrofit + Gson are working together to serialize the Json, response from the API call, to those 3 models described above.
+Retrofit + Gson are working together to deserialize the Json, response from the API call, to those 3 models described above.
 For the database cashing it is using another model called "PokemonEntity", which contain relevante information to run the app on the offline mode.
 
 ## Views:
