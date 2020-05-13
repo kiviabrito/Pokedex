@@ -10,6 +10,7 @@ import com.example.pokedex.network.PokemonService
 import com.example.pokedex.utility.SingleLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 
 class MainViewModel(
@@ -41,13 +42,14 @@ class MainViewModel(
     val disposable = database.pokemonDao().select20(from = from, to = to)
       .subscribeOn(Schedulers.io())
       .observeOn(Schedulers.single())
-      .subscribe({ list ->
+      .subscribeBy(onSuccess = { list ->
         if (list.isNotEmpty()) {
           updateRecyclerView(list)
         } else {
           fetchFirst20PokemonList()
         }
-      }, { error ->
+      },
+        onError = { error ->
         this.error.postValue(error.message)
       })
     disposables.add(disposable)
@@ -62,14 +64,15 @@ class MainViewModel(
         }
         .subscribeOn(Schedulers.io())
         .observeOn(mainThread())
-        .subscribe({ pokemon ->
+        .subscribeBy(onSuccess = { pokemon ->
           firstList.add(pokemon)
           if (firstList.size == 19) {
             updateRecyclerView(firstList)
           } else if (firstList.size == 20) {
             fetchAllPokemonList()
           }
-        }, { error ->
+        },
+          onError = { error ->
           this.error.postValue(error.message)
         })
       disposables.add(disposable)
@@ -84,9 +87,10 @@ class MainViewModel(
         }
         .subscribeOn(Schedulers.computation())
         .observeOn(mainThread())
-        .subscribe({}, { error ->
-          this.error.postValue(error.message)
-        })
+        .subscribeBy(onSuccess = {},
+          onError = { error ->
+            this.error.postValue(error.message)
+          })
       disposables.add(disposable)
     }
   }
@@ -107,11 +111,12 @@ class MainViewModel(
     val disposable = database.pokemonDao().queryByIdAndName("%$query%")
       .subscribeOn(Schedulers.computation())
       .observeOn(mainThread())
-      .subscribe({ list ->
+      .subscribeBy(onSuccess = { list ->
         val arrayList = arrayListOf<PokemonEntity>()
         list.sortedBy { it.id }.flatMapTo(arrayList) { arrayListOf(it) }
         _pokemonListAutoComplete.postValue(arrayList)
-      }, { error ->
+      },
+        onError = { error ->
         this.error.postValue(error.message)
       })
     disposables.add(disposable)
@@ -130,11 +135,12 @@ class MainViewModel(
       .onErrorReturn { database.pokemonDao().findById(id).blockingGet() }
       .subscribeOn(Schedulers.io())
       .observeOn(mainThread())
-      .subscribe({ pokemon ->
+      .subscribeBy(onSuccess = { pokemon ->
         _pokemonDetails.postValue(pokemon)
-      }, { error ->
-        this.error.postValue(error.message)
-      })
+      },
+        onError = { error ->
+          this.error.postValue(error.message)
+        })
     disposables.add(disposable)
   }
 

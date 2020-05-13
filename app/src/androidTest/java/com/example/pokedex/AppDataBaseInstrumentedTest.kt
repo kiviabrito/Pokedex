@@ -4,7 +4,7 @@ import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.pokedex.db.AppDatabase
-import com.example.pokedex.utility.test.PokemonFactory
+import com.example.pokedex.utility.testUtil.PokemonFactory
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before

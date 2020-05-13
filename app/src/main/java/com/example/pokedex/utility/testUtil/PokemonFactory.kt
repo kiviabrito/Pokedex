@@ -1,4 +1,4 @@
-package com.example.pokedex.utility.test
+package com.example.pokedex.utility.testUtil
 
 import com.example.pokedex.model.Detail
 import com.example.pokedex.model.PokemonEntity

@@ -39,7 +39,7 @@ For the database cashing it is using another model called "PokemonEntity", which
 For the view it is using one Activity, which is hosting two fragments (MainFragment and DetailsFragment).
 - MainFragment : 
 
-It is displaying the list of Pokemon(picture, types, id and name) and a search button.
+It is displaying the list of Pokemon(picture, types, id and name) with an endless scrolling, and a search button.
 
 
 ![alt text](https://github.com/kiviabrito/Pokedex/blob/master/Screenshot_MainFragment.png) 
